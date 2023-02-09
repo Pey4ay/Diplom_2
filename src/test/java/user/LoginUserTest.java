@@ -1,3 +1,9 @@
+package user;
+
+import user.json.UserCreateJson;
+import user.UserGenerator;
+import user.json.UserLoginJson;
+import user.UserResponse;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Assert;
@@ -20,15 +26,12 @@ public class LoginUserTest {
         userResponse = new UserResponse();
         userCreateJson = UserGenerator.getDefaultCreateUser();
         userResponse.create(userCreateJson);
-
     }
 
     //Удаление пользователя с проверкой. Если пользователь не создан, то и запрос не будет отправлен.
     @After
     public void cleanUp(){
-        if (accessToken != null){
-            userResponse.delete(accessToken);
-        }
+        userResponse.delete(accessToken);
     }
 
     //Логин под существующим пользователем

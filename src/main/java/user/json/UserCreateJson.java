@@ -1,3 +1,5 @@
+package user.json;
+
 public class UserCreateJson {
     private String email;
     private String password;

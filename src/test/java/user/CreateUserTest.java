@@ -1,3 +1,8 @@
+package user;
+
+import user.json.UserCreateJson;
+import user.UserGenerator;
+import user.UserResponse;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Assert;
