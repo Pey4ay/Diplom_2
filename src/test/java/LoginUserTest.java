@@ -1,9 +1,9 @@
-package user;
-
-import user.json.UserCreateJson;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import user.UserGenerator;
-import user.json.UserLoginJson;
 import user.UserResponse;
+import user.json.UserCreateJson;
+import user.json.UserLoginJson;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Assert;
@@ -19,8 +19,6 @@ public class LoginUserTest {
     private UserLoginJson userLoginJson;
     private String accessToken;
 
-
-    //Создание пользователем перед тестом, так как это необходимое условие для авторизации.
     @Before
     public void setUp(){
         userResponse = new UserResponse();
@@ -28,29 +26,28 @@ public class LoginUserTest {
         userResponse.create(userCreateJson);
     }
 
-    //Удаление пользователя с проверкой. Если пользователь не создан, то и запрос не будет отправлен.
     @After
     public void cleanUp(){
         userResponse.delete(accessToken);
     }
 
-    //Логин под существующим пользователем
     @Test
+    @DisplayName("Authorization with created user. Endpoint: api/auth/login")
+    @Description("Authorization with created user and check status code. Status code must be 200")
     public void loginWithCreatedUser(){
         userLoginJson = UserGenerator.getDefaultLoginUser();
         ValidatableResponse response = userResponse.login(userLoginJson);
         Assert.assertEquals(SC_OK, response.extract().statusCode());
-
         this.accessToken = response.extract().path("accessToken");
     }
 
-    //Логин с неверным логином и паролем
     @Test
+    @DisplayName("Authorization with incorrect information. Endpoint: api/auth/login")
+    @Description("Authorization with incorrect login and password. Check status code. Status code must be 401")
     public void loginWithCreatedUserAndBadPassword(){
         userLoginJson = UserGenerator.getBadDefaultLoginUser();
         ValidatableResponse badResponse = userResponse.login(userLoginJson);
         Assert.assertEquals(SC_UNAUTHORIZED, badResponse.extract().statusCode());
-
         ValidatableResponse response = userResponse.login(UserGenerator.getDefaultLoginUser());
         this.accessToken = response.extract().path("accessToken");
     }

@@ -1,8 +1,8 @@
-package user;
-
-import user.json.UserCreateJson;
+import io.qameta.allure.Description;
 import user.UserGenerator;
 import user.UserResponse;
+import user.json.UserCreateJson;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Assert;
@@ -18,13 +18,11 @@ public class CreateUserTest {
     private UserCreateJson userCreateJson;
     private String accessToken;
 
-
     @Before
     public void setUp(){
         userResponse = new UserResponse();
     }
 
-    //Удаление пользователя с проверкой. Если пользователь не создан, то и запрос не будет отправлен.
     @After
     public void cleanUp(){
         if (accessToken != null){
@@ -32,8 +30,9 @@ public class CreateUserTest {
         }
     }
 
-    //Создание пользователя с полным набором данных
     @Test
+    @DisplayName("Create new user with full information. Endpoint: api/auth/register")
+    @Description("Create new user with full information and check status code. Status code must be 200")
     public void createNewUserWithFullInformation(){
         userCreateJson = UserGenerator.getDefaultCreateUser();
         ValidatableResponse response = userResponse.create(userCreateJson);
@@ -42,8 +41,9 @@ public class CreateUserTest {
         this.accessToken = response.extract().path("accessToken");
     }
 
-    //Создание пользователя с даннымми уже зарегистрированного пользователя
     @Test
+    @DisplayName("Double create once user. Endpoint: api/auth/register")
+    @Description("Create user twice. When we create him second time, we will get 403 status code")
     public void doubleCreateUser(){
         userCreateJson = UserGenerator.getDefaultCreateUser();
         ValidatableResponse response = userResponse.create(userCreateJson);
@@ -53,8 +53,9 @@ public class CreateUserTest {
         this.accessToken = response.extract().path("accessToken");
     }
 
-    //Создание пользователя без одного обязательного поля
     @Test
+    @DisplayName("Create new user with not full information. Endpoint: api/auth/register")
+    @Description("Create new user with not full information and check status code. Status code must be 403")
     public void  createUserWithNotFullInformation(){
         userCreateJson = UserGenerator.getBadDefaultCreateUser();
         ValidatableResponse response = userResponse.create(userCreateJson);

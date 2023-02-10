@@ -1,5 +1,6 @@
 package user;
 
+import io.qameta.allure.Step;
 import user.json.UserCreateJson;
 import user.json.UserEditJson;
 import user.json.UserLoginJson;
@@ -10,6 +11,7 @@ import static io.restassured.RestAssured.given;
 
 public class UserResponse extends UserConstants {
 
+    @Step("Create user")
     public ValidatableResponse create (UserCreateJson userCreateJson){
         return given()
                 .spec(getSpec())
@@ -19,6 +21,7 @@ public class UserResponse extends UserConstants {
                 .then();
     }
 
+    @Step("Delete user")
     public ValidatableResponse delete (String accessToken){
         return given()
                 .spec(getSpec())
@@ -28,6 +31,7 @@ public class UserResponse extends UserConstants {
                 .then();
     }
 
+    @Step("Login user")
     public ValidatableResponse login (UserLoginJson userLoginJson){
         return given()
                 .spec(getSpec())
@@ -37,6 +41,7 @@ public class UserResponse extends UserConstants {
                 .then();
     }
 
+    @Step("Edit user information with authorization")
     public ValidatableResponse editUserInformation(UserEditJson userEditJson, String accessToken){
         return given()
                 .spec(getSpec())
@@ -47,6 +52,7 @@ public class UserResponse extends UserConstants {
                 .then();
     }
 
+    @Step("Edit user information with no authorization")
     public ValidatableResponse editUserWithNotAuthorization(UserEditJson userEditJson){
         return given()
                 .spec(getSpec())
